@@ -16,11 +16,6 @@
     background-attachment: fixed;
     background-position: center;
 }
-.whyCrifSection .bigFont{
-    font-family: 'Overpass', sans-serif;
-    font-size: 1.4rem;
-    max-width: 1000px;
-}
 
 .blueVectorBg1{background: url('./../images/blue-rect.png') bottom right;width: 100%;height: 100%;background-repeat: no-repeat;background-size: contain;position: absolute;right: 0;top: 0;bottom: 0;}
 .blueVectorBg2{background: url('./../images/grey-rect.png') bottom right;width: 100%;height: 100%;background-repeat: no-repeat;background-size: contain;position: absolute;right: 0;top: 0;bottom: 0;}
@@ -45,7 +40,7 @@
     .hero-style .slide-text p, .slide-btns p {font-size: 0.95rem}
     .hero-slider .slide-inner{align-items: flex-start; padding-top: 50px;}
     .hero-slider .slide-bg-image{height: 180px; width: 100%;right: 0;}
-    .hero-slider .bannerContent{position: absolute;top: 200px; bottom: auto;text-align: center;}
+    .hero-slider .bannerContent{position: absolute;top: 210px; bottom: auto;text-align: center;}
     
     .hero-style .slide-title, .hero-style .slide-text, .hero-style .slide-btns{max-width: 100%;width: fit-content;margin: auto;text-align: center;}
     .hero-style .slide-btns .orangeBtn{margin: auto;}

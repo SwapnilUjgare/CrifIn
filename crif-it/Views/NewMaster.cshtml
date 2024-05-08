@@ -100,7 +100,7 @@
 @{
     Home? homePage = (Home?)Umbraco.ContentAtRoot()?.FirstOrDefault();
     bool isHome = Umbraco.AssignedContentItem.Name == "Home" ? true : false;
-    bool isCreditScore = false;
+    bool isCreditScore = Umbraco.AssignedContentItem.Name == "Credit Score" ? true : false;
 }
 <!doctype html>
 <html lang="it">
@@ -219,159 +219,217 @@
 </head>
 
 <body>
-    @if (crifConfiguration != null && crifConfiguration.EnableGtm)
-    {
-        <noscript>
-            <iframe src="https://www.googletagmanager.com/ns.html?id=@crifConfiguration.GtmCode"
-                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
-        </noscript>
-    }
-
     @{
         var firstLevelPages = homePage?.Children?.Where(x => (x.ContentType.Alias != "xmlSiteMap"));
     }
     <header id="navbar">
         <div class="container">
-            <div class="row justify-content-between align-items-center align-items-lg-end">
+            <div class="row justify-content-between align-items-center align-items-lg-end gx-0">
                 <div class="col-auto">
-                    <a title="crif-logo" href="@homePage?.Url()">
-                        <img src="~/assets/img/logo.svg" alt="crif-logo" class="logo">
-                    </a>
+                    <a href="@homePage?.Url()"><img src="~/assets/img/logo-crif.svg" alt="crif-logo" class="logo"></a>
                 </div>
                 <div class="col">
-                    <div class="row gx-0 justify-content-end align-items-center position-relative">
-                        <ul class="col-12 topNav lineEffect text-end py-2">
+                    <div class="row gx-0 justify-content-end align-items-end position-relative">
 
-                            @if (menuSettings != null && menuSettings?.CustomLinks != null)
-                            {
-                                foreach (BlockExternalLink singleLink in menuSettings.CustomLinks)
-                                {
-                                    <li class="">
-                                        <a class="" href="@singleLink?.ExternalLink?.Url" title="@singleLink?.ExternalLink?.Name"
-                                           target="@singleLink?.ExternalLink?.Target" data-link-type="menu" data-link="@singleLink?.ExternalLink?.Name" data-category="">
-                                            @singleLink?.ExternalLink?.Name
-                                        </a>
-                                    </li>
-                                }
-                            }
-                            <li>
-                                <a href="#" class="country-toggle">WordWide <img src="~/assets/images/icons/globe-icon.svg" alt="" class="globe" /></a>
-                                @* <div class="country-menu">
-                                    <div>
-                                        <p>@menuSettings?.GlobalLabel</p>
-                                        <a title="@menuSettings?.GlobalLink?.Name" href="@menuSettings?.GlobalLink?.Url" target="@menuSettings?.GlobalLink?.Target" class="btn btn-outline">@menuSettings?.GlobalLink?.Name</a>
-                                    </div>
-                                    @if (menuSettings != null && menuSettings.ContinentAndCountries != null)
+                        <div class="col menuWrp">
+                            <div class="row">
+                                <ul class="col-12 order-2 order-lg-1 topNav lineEffect text-lg-end py-2">
+                                    @if (menuSettings != null && menuSettings?.CustomLinks != null)
                                     {
-                                        foreach (BlockListItem item in menuSettings.ContinentAndCountries)
+                                        foreach (BlockExternalLink singleLink in menuSettings.CustomLinks)
                                         {
-                                            BlockMenuCountries continent = (BlockMenuCountries)item.Content;
-                                            var colLayout = continent?.CountriesSettings?.Count > 11 ? "double-column" : "";
-                                            <div>
-                                                <p>@continent?.CountriesContinent</p>
-                                                <ul class="@colLayout">
-                                                    @if (continent != null && continent.CountriesSettings != null)
+                                            <li class="">
+                                                <a class="" href="@singleLink?.ExternalLink?.Url" title="@singleLink?.ExternalLink?.Name"
+                                                   target="@singleLink?.ExternalLink?.Target" data-link-type="menu" data-link="@singleLink?.ExternalLink?.Name" data-category="">
+                                                    @singleLink?.ExternalLink?.Name
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    <li class="hasDropdown">
+                                        <a href="#" class="country-toggle">@Umbraco.GetDictionaryValue("country_label") <img src="~/assets/images/icons/globe-icon.svg" alt="" class="globe" /></a>
+                                        <div class="container WorldWideDropdown dropDown">
+                                            <div class="row justify-content-between">
+                                                <div class="col-lg-3">
+                                                    <h4>@menuSettings?.GlobalLabel</h4>
+                                                    <a title="@menuSettings?.GlobalLink?.Name" href="@menuSettings?.GlobalLink?.Url" target="@menuSettings?.GlobalLink?.Target" class="orangeBtn">@menuSettings?.GlobalLink?.Name</a>
+
+                                                </div>
+                                                @if (menuSettings != null && menuSettings.ContinentAndCountries != null)
+                                                {
+                                                    foreach (BlockListItem item in menuSettings.ContinentAndCountries)
                                                     {
-                                                        foreach (BlockListItem elm in continent.CountriesSettings)
-                                                        {
-                                                            BlockSingleCountry country = (BlockSingleCountry)elm.Content;
-                                                            if (country.DoubleLink)
-                                                            {
-                                                                <li>
-                                                                    <p class="country">
-                                                                        <img src="@country?.CountryFlag?.Url()" alt="@HtmlUtils.GetImageAlt(country?.CountryFlag)">@country?.CountryLabel
-                                                                    </p>
-                                                                    <ul class="offices">
-                                                                        @if (country != null && country.CountryLinks != null)
+                                                        BlockMenuCountries continent = (BlockMenuCountries)item.Content;
+                                                        var colLayout = continent?.CountriesSettings?.Count > 11 ? "double-column" : "";
+                                                        <div class="col-lg-3">
+                                                            <h4>@continent?.CountriesContinent</h4>
+                                                            <ul class="">
+                                                                @if (continent != null && continent.CountriesSettings != null)
+                                                                {
+                                                                    foreach (BlockListItem elm in continent.CountriesSettings)
+                                                                    {
+                                                                        BlockSingleCountry country = (BlockSingleCountry)elm.Content;
+                                                                        if (country.DoubleLink)
                                                                         {
-                                                                            foreach (var countryLink in country.CountryLinks)
+                                                                            <li>
+                                                                                <p class="">
+                                                                                    @*<img src="@country?.CountryFlag?.Url()" alt="@HtmlUtils.GetImageAlt(country?.CountryFlag)">*@
+                                                                                    @country?.CountryLabel
+                                                                                </p>
+                                                                                <ul class="">
+                                                                                    @if (country != null && country.CountryLinks != null)
+                                                                                    {
+                                                                                        foreach (var countryLink in country.CountryLinks)
+                                                                                        {
+                                                                                            <li><a title="@countryLink.Name" href="@countryLink.Url" target="@countryLink.Target">@countryLink.Name</a></li>
+                                                                                        }
+                                                                                    }
+                                                                                </ul>
+                                                                            </li>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <li>
+                                                                                @*<img src="@country?.CountryFlag?.Url()" alt="@HtmlUtils.GetImageAlt(country?.CountryFlag)">*@
+                                                                                <a title="@country?.CountryLink?.Target" class="" href="@country?.CountryLink?.Url" target="@country?.CountryLink?.Target">
+
+                                                                                    @country?.CountryLink?.Name
+                                                                                </a>
+                                                                            </li>
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="col order-1 order-lg-2 mainNav text-end">
+                                    @if (firstLevelPages != null)
+                                    {
+                                        <ul class="navList d-lg-flex justify-content-end align-items-center">
+                                            @foreach (IPublishedContent firstLevelPage in firstLevelPages)
+                                            {
+                                                bool hide1 = (firstLevelPage.Value("hideInMenu") != null) ? (bool)firstLevelPage.Value("hideInMenu") : false;
+                                                bool hideChildren1 = (firstLevelPage.Value("hideChildrenInMenu") != null) ? (bool)firstLevelPage.Value("hideChildrenInMenu") : false;
+                                                bool addSpecialChild1 = (firstLevelPage.Value("addSpecialChildren") != null) ? (bool)firstLevelPage.Value("addSpecialChildren") : false;
+                                                var specialChild1 = (firstLevelPage.Value("specialChild") != null) ? firstLevelPage.Value("specialChild") : null;
+                                                var specialChildLabel1 = (firstLevelPage.Value("specialChildLabel") != null) ? firstLevelPage.Value("specialChildLabel") : "";
+
+                                                if (firstLevelPage.Children != null && firstLevelPage.Children.Any() && !hide1 && !hideChildren1)
+                                                {
+                                                    var pageLink = firstLevelPage.TemplateId == null ? "#" : firstLevelPage.Url();
+                                                    <li class="hasDropdown">
+                                                        <a title="@firstLevelPage.Name" class="" href="@pageLink" role="button" data-link-type="menu" data-link="@firstLevelPage.Name" data-link-destination="@pageLink" data-link-section="@firstLevelPage.Name">
+                                                            @firstLevelPage.Name
+                                                        </a>
+                                                        <div class="dropDown cardDropdown">
+                                                            <div class="row mx-0">
+                                                                <div class="col-12 col-md-4 px-0 dropDownList">
+                                                                    <ul>
+                                                                        @foreach (IPublishedContent secondLevelPage in firstLevelPage.Children)
+                                                                        {
+                                                                            bool hide2 = (secondLevelPage.Value("hideInMenu") != null) ? (bool)secondLevelPage.Value("hideInMenu") : false;
+                                                                            bool hideChildren2 = (secondLevelPage.Value("hideChildrenInMenu") != null) ? (bool)secondLevelPage.Value("hideChildrenInMenu") : false;
+                                                                            bool addSpecialChild2 = (secondLevelPage.Value("addSpecialChildren") != null) ? (bool)secondLevelPage.Value("addSpecialChildren") : false;
+                                                                            var specialChild2 = (secondLevelPage.Value("specialChild") != null) ? secondLevelPage.Value("specialChild") : null;
+                                                                            var specialChildLabel2 = (secondLevelPage.Value("specialChildLabel") != null) ? secondLevelPage.Value("specialChildLabel") : "";
+                                                                            @if (secondLevelPage.Children != null && @secondLevelPage.Children.Any() && !hide2 && !hideChildren2)
                                                                             {
-                                                                                <li><a title="@countryLink.Name" href="@countryLink.Url" target="@countryLink.Target">@countryLink.Name</a></li>
+                                                                                <li><a title="@secondLevelPage.Name" class="nav-link" href="@secondLevelPage.Url()" data-link-type="menu" data-link="@secondLevelPage.Name" data-link-destination="@secondLevelPage.Url()" data-link-section="@firstLevelPage.Name - @secondLevelPage.Name">@secondLevelPage.Name</a></li>
+
+                                                                            }
+                                                                            else if (!hide2)
+                                                                            {
+                                                                                <li><a title="@secondLevelPage.Name" class="nav-link" href="@secondLevelPage.Url()" data-link-type="menu" data-link="@secondLevelPage.Name" data-link-destination="@secondLevelPage.Url()" data-link-section="@firstLevelPage.Name - @secondLevelPage.Name">@secondLevelPage.Name</a></li>
                                                                             }
                                                                         }
                                                                     </ul>
-                                                                </li>
-                                                            }
-                                                            else
-                                                            {
-                                                                <li>
-                                                                    <a title="@country?.CountryLink?.Target" class="country" href="@country?.CountryLink?.Url" target="@country?.CountryLink?.Target">
-                                                                        <img src="@country?.CountryFlag?.Url()" alt="@HtmlUtils.GetImageAlt(country?.CountryFlag)">@country?.CountryLink?.Name
-                                                                    </a>
-                                                                </li>
-                                                            }
+                                                                </div>
+                                                                @if (menuSettings?.FeaturedCards != null)
+                                                                {
+                                                                    foreach (BlockListItem item in menuSettings.FeaturedCards)
+                                                                    {
+                                                                        BlockFeaturedCard featuredCard = (BlockFeaturedCard)item.Content;
+                                                                        if (featuredCard?.KindOfContent?.GetType() == firstLevelPage?.GetType() && featuredCard?.FeaturedCard != null)
+                                                                        {
+                                                                            foreach (BlockListItem singleCard in featuredCard.FeaturedCard)
+                                                                            {
+                                                                                BlockCardProduct card = (BlockCardProduct)singleCard.Content;
+                                                                                <div class="col-12 col-md-8 dropDownCard">
+                                                                                    <h5 class="featured-title">@Umbraco.GetDictionaryValue("menu_featured_card")</h5>
+                                                                                    <div class="iconCardImg boxShadow m-0 h-100">
+                                                                                        <div class="cardBody">
+                                                                                            <img src="@card?.Icon?.Url()" alt="@HtmlUtils.GetImageAlt(card?.Icon)" class="iconImg" />
+                                                                                            <h4 class="iconTitle colorBlue lineHeight2">@card?.Title</h4>
+                                                                                            <p class="iconInfo mb-4 mb-lg-5">@card?.Text</p>
+                                                                                            @if (card?.CallToAction != null)
+                                                                                            {
+                                                                                                <a title="@card?.CallToAction?.Name" href="@card?.CallToAction?.Url" class="arrowBtn" data-link-type="page" data-link="@card?.Title" data-link-destination="@card?.CallToAction?.Url" data-link-section="menu">@card?.CallToAction?.Name</a>
+                                                                                            }
+                                                                                        </div>
+                                                                                        <div class="imgWrapper">
+                                                                                            <img src="@card?.BackgroundImage?.Url()" alt="@HtmlUtils.GetImageAlt(card?.BackgroundImage)" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
 
-                                                        }
-                                                    }
-                                                </ul>
-                                            </div>
-                                        }
-                                    }
-                                </div> *@
-                            </li>
-                        </ul>
-                        <div class="col menuWrp mainNav text-end">
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
 
-                            @if (firstLevelPages != null)
-                            {
-                                <ul class="navList d-inline">
-                                    @foreach (IPublishedContent firstLevelPage in firstLevelPages)
-                                    {
-                                        bool hide1 = (firstLevelPage.Value("hideInMenu") != null) ? (bool)firstLevelPage.Value("hideInMenu") : false;
-                                        bool hideChildren1 = (firstLevelPage.Value("hideChildrenInMenu") != null) ? (bool)firstLevelPage.Value("hideChildrenInMenu") : false;
-                                        bool addSpecialChild1 = (firstLevelPage.Value("addSpecialChildren") != null) ? (bool)firstLevelPage.Value("addSpecialChildren") : false;
-                                        var specialChild1 = (firstLevelPage.Value("specialChild") != null) ? firstLevelPage.Value("specialChild") : null;
-                                        var specialChildLabel1 = (firstLevelPage.Value("specialChildLabel") != null) ? firstLevelPage.Value("specialChildLabel") : "";
+                                                            </div>
+                                                        </div>
 
-                                        if (firstLevelPage.Children != null && firstLevelPage.Children.Any() && !hide1 && !hideChildren1)
-                                        {
-                                            var pageLink = firstLevelPage.TemplateId == null ? "#" : firstLevelPage.Url();
-                                            <li class="hasDropdown">
-                                                <a title="@firstLevelPage.Name" class="" href="@pageLink" role="button" data-link-type="menu" data-link="@firstLevelPage.Name" data-link-destination="@pageLink" data-link-section="@firstLevelPage.Name">
-                                                    @firstLevelPage.Name
-                                                </a>
-                                                <ul class="dropDown">
-                                                    @foreach (IPublishedContent secondLevelPage in firstLevelPage.Children)
-                                                    {
-                                                        bool hide2 = (secondLevelPage.Value("hideInMenu") != null) ? (bool)secondLevelPage.Value("hideInMenu") : false;
-                                                        bool hideChildren2 = (secondLevelPage.Value("hideChildrenInMenu") != null) ? (bool)secondLevelPage.Value("hideChildrenInMenu") : false;
-                                                        bool addSpecialChild2 = (secondLevelPage.Value("addSpecialChildren") != null) ? (bool)secondLevelPage.Value("addSpecialChildren") : false;
-                                                        var specialChild2 = (secondLevelPage.Value("specialChild") != null) ? secondLevelPage.Value("specialChild") : null;
-                                                        var specialChildLabel2 = (secondLevelPage.Value("specialChildLabel") != null) ? secondLevelPage.Value("specialChildLabel") : "";
-                                                        @if (secondLevelPage.Children != null && @secondLevelPage.Children.Any() && !hide2 && !hideChildren2)
-                                                        {
-                                                            <li><a title="@secondLevelPage.Name" class="nav-link" href="@secondLevelPage.Url()" data-link-type="menu" data-link="@secondLevelPage.Name" data-link-destination="@secondLevelPage.Url()" data-link-section="@firstLevelPage.Name - @secondLevelPage.Name">@secondLevelPage.Name</a></li>
+                                                    </li>
 
-                                                        }
-                                                        else if (!hide2)
-                                                        {
-                                                            <li><a title="@secondLevelPage.Name" class="nav-link" href="@secondLevelPage.Url()" data-link-type="menu" data-link="@secondLevelPage.Name" data-link-destination="@secondLevelPage.Url()" data-link-section="@firstLevelPage.Name - @secondLevelPage.Name">@secondLevelPage.Name</a></li>
-                                                        }
-                                                    }
-                                                </ul>
-                                            </li>
+                                                }
+                                                else if (!hide1)
+                                                {
+                                                    <li class="">
+                                                        <a title="@firstLevelPage.ContentType.Alias" class="" href="@firstLevelPage.Url()" data-link-type="menu" data-link="@firstLevelPage.Name" data-link-destination="@firstLevelPage.Url()" data-link-section="@firstLevelPage.ContentType.Alias">
+                                                            @firstLevelPage.Name
+                                                        </a>
+                                                    </li>
 
-                                        }
-                                        else if (!hide1)
-                                        {
-                                            @if (firstLevelPage.Name.ToString() != "HomeNew")
+                                                }
+                                            }
+                                            @if (searchPage != null)
                                             {
-                                                <li class="">
-                                                    <a title="@firstLevelPage.ContentType.Alias" class="" href="@firstLevelPage.Url()" data-link-type="menu" data-link="@firstLevelPage.Name" data-link-destination="@firstLevelPage.Url()" data-link-section="@firstLevelPage.ContentType.Alias">
-                                                        @firstLevelPage.Name
-                                                    </a>
+                                                <li class="d-none d-lg-block">
+                                                    <button id="serch-lens" class="search-toggler blankBtn">
+                                                        <img src="~/assets/images/icons/search-icon.svg" alt=""
+                                                             class="w-100">
+                                                    </button>
                                                 </li>
                                             }
-                                        }
+                                            @foreach (IPublishedContent firstLevelPage in firstLevelPages)
+                                            {
+                                                if (firstLevelPage.Name.ToString() == "Contact us")
+                                                {
+
+                                                    <li class="py-0 pe-0">
+                                                        <a class="orangeBtn w-100 w-lg-auto" title="@firstLevelPage.ContentType.Alias" href="@firstLevelPage.Url()" data-link-type="menu" data-link="@firstLevelPage.Name" data-link-destination="@firstLevelPage.Url()" data-link-section="@firstLevelPage.ContentType.Alias">
+                                                            @firstLevelPage.Name
+                                                        </a>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
                                     }
-                                </ul>
-                            }
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-auto d-flex align-items-center pb-lg-2">
+                        <div class="col-auto d-flex align-items-center endDiv d-lg-none">
                             @if (searchPage != null)
                             {
-                                <span class="mx-3 mx-xl-4">
-                                    <button id="serch-lens" class="search-toggler blankBtn"><img src="~/assets/images/icons/search-icon.svg" alt=""></button>
+                                <span class="mx-3 mx-md-2 mx-xl-3">
+                                    <button id="serch-lens" class="search-toggler blankBtn"><img src="~/assets/images/icons/search-icon.svg" alt="" class="w-100"></button>
                                 </span>
                             }
                             @if (firstLevelPages != null)
@@ -383,20 +441,25 @@
                                         <span class="ms-2 ms-xl-3 d-none d-lg-inline">
                                             <a title="@firstLevelPage.ContentType.Alias" href="@firstLevelPage.Url()" data-link-type="menu" data-link="@firstLevelPage.Name" data-link-destination="@firstLevelPage.Url()" data-link-section="@firstLevelPage.ContentType.Alias" class="orangeBtn">@firstLevelPage.Name</a>
                                         </span>
+                                        break;
                                     }
                                 }
                             }
-
-
-                            <button class="menuBtn d-lg-none">
-                                <span></span><span></span><span></span><span></span>
-                            </button>
+                            <button class="menuBtn d-lg-none"><span></span><span></span><span></span><span></span></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
+    @if (crifConfiguration != null && crifConfiguration.EnableGtm)
+    {
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id=@crifConfiguration.GtmCode"
+                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        </noscript>
+    }
+
     @if (searchPage != null)
     {
         <div class="search-ovl-wrp">
@@ -442,8 +505,8 @@
                             </div>
                         </div>
                     </div>
-                  
-                     <div class="col-12 col-sm-12 col-lg-8">
+
+                    <div class="col-12 col-sm-12 col-lg-8">
                         <div class="row">
                             @if (menuSettings.ImportantLinks != null)
                             {
@@ -451,45 +514,45 @@
                                     <div class="footerLinks lineEffect">
                                         <h5 class="colorWhite my-2 mb-md-4">Important Links</h5>
                                         <ul>
-@foreach (var a in menuSettings.ImportantLinks)
-                                        {
-                                            <li><a href="@a.ExternalLink.Url">@a.ExternalLink.Name</a></li>
-                                        } 
-                                                </ul>
-                                        </div>
-                            </div>
+                                            @foreach (var a in menuSettings.ImportantLinks)
+                                            {
+                                                <li><a href="@a.ExternalLink.Url">@a.ExternalLink.Name</a></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
                             }
                             @if (menuSettings.BusinessNeeds != null)
                             {
-                            <div class="col-12 col-md-4">
-                                <div class="footerLinks lineEffect">
-                                    <h5 class="colorWhite my-2 mb-md-4">Business Needs</h5>
-                                    <ul>
-                                        @foreach (var a in menuSettings.BusinessNeeds)
-                                        {
-                                            <li><a href="@a.ExternalLink.Url">@a.ExternalLink.Name</a></li>
-                                        }
-                                    </ul>
+                                <div class="col-12 col-md-4">
+                                    <div class="footerLinks lineEffect">
+                                        <h5 class="colorWhite my-2 mb-md-4">Business Needs</h5>
+                                        <ul>
+                                            @foreach (var a in menuSettings.BusinessNeeds)
+                                            {
+                                                <li><a href="@a.ExternalLink.Url">@a.ExternalLink.Name</a></li>
+                                            }
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
                             }
                             @if (menuSettings.MoreInformation != null)
                             {
-                            <div class="col-12 col-md-4">
-                                <div class="footerLinks lineEffect">
-                                    <h5 class="colorWhite my-2 mb-md-4">More Information</h5>
-                                    <ul>
-                                        @foreach (var a in menuSettings.MoreInformation)
-                                        {
-                                            <li><a href="@a.ExternalLink.Url">@a.ExternalLink.Name</a></li>
-                                        }
-                                    </ul>
+                                <div class="col-12 col-md-4">
+                                    <div class="footerLinks lineEffect">
+                                        <h5 class="colorWhite my-2 mb-md-4">More Information</h5>
+                                        <ul>
+                                            @foreach (var a in menuSettings.MoreInformation)
+                                            {
+                                                <li><a href="@a.ExternalLink.Url">@a.ExternalLink.Name</a></li>
+                                            }
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
                             }
                         </div>
                     </div>
-                
+
                 </div>
             </div>
         </div>
@@ -498,7 +561,7 @@
                 <div class="row justify-content-between align-items-center text-center text-md-start">
                     <div class="col-12 col-md-6">
 
-                        <img src="~/assets/images/logo.svg" alt="@HtmlUtils.GetImageAlt(menuSettings?.FooterLogo)" class="footerLogo" />
+                        <img src="~/assets/img/logo-crif.svg" alt="@HtmlUtils.GetImageAlt(menuSettings?.FooterLogo)" class="footerLogo" />
                     </div>
 
                     @if (menuSettings != null && menuSettings.ShowSocial)
@@ -1018,23 +1081,23 @@
             if (j == Model.AncestorsOrSelf().Count() - 1)
             {
                 <text>
-                                                                                                                                                                                                                {
-                                                                                                                                                                                                                    "@@type": "ListItem",
-                                                                                                                                                                                                                    "position": @counter,
-                                                                                                                                                                                                                    "name": "@content?.Name",
-                                                                                                                                                                                                                    "item": "@content?.Url(mode: UrlMode.Absolute)"
-                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                                                                                                                                                                                    "@@type": "ListItem",
+                                                                                                                                                                                                                                                                                                                                                                                                    "position": @counter,
+                                                                                                                                                                                                                                                                                                                                                                                                    "name": "@content?.Name",
+                                                                                                                                                                                                                                                                                                                                                                                                    "item": "@content?.Url(mode: UrlMode.Absolute)"
+                                                                                                                                                                                                                                                                                                                                                                                                }
                 </text>
             }
             else
             {
                 <text>
-                                                                                                                                                                                                                {
-                                                                                                                                                                                                                    "@@type": "ListItem",
-                                                                                                                                                                                                                    "position": @counter,
-                                                                                                                                                                                                                    "name": "@content?.Name",
-                                                                                                                                                                                                                    "item": "@content?.Url(mode: UrlMode.Absolute)"
-                                                                                                                                                                                                                },
+                                                                                                                                                                                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                                                                                                                                                                                    "@@type": "ListItem",
+                                                                                                                                                                                                                                                                                                                                                                                                    "position": @counter,
+                                                                                                                                                                                                                                                                                                                                                                                                    "name": "@content?.Name",
+                                                                                                                                                                                                                                                                                                                                                                                                    "item": "@content?.Url(mode: UrlMode.Absolute)"
+                                                                                                                                                                                                                                                                                                                                                                                                },
                 </text>
             }
         }
@@ -1051,7 +1114,7 @@
             @foreach (var content in Model.AncestorOrSelf(1).Children)
             {
                 <text>
-                                                                                                                                "@content.Name",
+                                                                                                                                                                                                                        "@content.Name",
                 </text>
             }
             ],
@@ -1059,7 +1122,7 @@
             @foreach (var content in Model.AncestorOrSelf(1).Children)
             {
                 <text>
-                                                                                                                                "@content.Url(mode: UrlMode.Absolute)",
+                                                                                                                                                                                                                        "@content.Url(mode: UrlMode.Absolute)",
                 </text>
             }
             ]
