@@ -100,7 +100,11 @@
 @{
     Home? homePage = (Home?)Umbraco.ContentAtRoot()?.FirstOrDefault();
     bool isHome = Umbraco.AssignedContentItem.Name == "Home" ? true : false;
-    bool isCreditScore = Umbraco.AssignedContentItem.Name == "Credit Score" ? true : false;
+    bool isCreditScore = false;
+    if (Umbraco.AssignedContentItem.Name != null)
+    {
+       isCreditScore = Umbraco.AssignedContentItem.Name == "Credit Score" ? true : false;
+    }
 }
 <!doctype html>
 <html lang="it">
