@@ -11,7 +11,7 @@
 
 @media (min-width: 991.9px) {
    li.hasDropdown:hover .dropDown{display: block; animation: slideIn 0.3s linear forwards;}
-   .dropDown.cardDropdown{left: -300%;padding: 0;min-width: 700px;}
+   .dropDown.cardDropdown{left: 0%;padding: 0;min-width: 700px;}
    .dropDown .dropDownCard{display: block;}
    .halfField{width: 49.3%;}
  }
@@ -102,7 +102,7 @@
   .blueCard.bgWhite:not(.centerCard) .cardBtm{width: 90%;}
   .blueCard h5{font-size: 1.8vw;width: 70%;margin-bottom: 1vw;}
   .blueCard .arrowBtn{bottom: 1.5vw;left: 0;right: 0;}
-  .blueCard:not(.centerCard) .arrowBtn{bottom: 1.5vw;right: 2vw;left: auto;}
+  .blueCard:not(.centerCard) .arrowBtn, .blueCard:not(.centerCard) .orangeBtn{bottom: 1.5vw;right: 2vw;left: auto;}
   .blueCard:not(.bgWhite) .arrowBtn{left: 2vw;right: auto;}
 
   .faqCard{padding: 3vw 2vw;}

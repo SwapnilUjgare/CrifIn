@@ -8,19 +8,22 @@
 {
     @if (settings.AnchorID == "withoutlink")
     {
-        <section class="pageSection">
+        <section class="pageSection bg-none pb-0">
             <div class="container">
-                <div class="titleSection mb-0">
-                    @if (!string.IsNullOrEmpty(content.Title))
-                    {
-                        <h2 class="title text-center">@content.Title</h2>
-                    }
-                    <div class="text-center bigFont fw-normal">
-                        @Html.Raw(content.Text)
+                <div class="row justify-content-center text-center">
+                    <div class="col col-md-10">
+                        @if (!string.IsNullOrEmpty(content.Title))
+                        {
+                            <h2 class="title">@content.Title</h2>
+                        }
+                        <div class="mx-auto mb-0 bigFont mainTxt">
+                            @Html.Raw(content.Text)
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
+        
     }
     else
     {

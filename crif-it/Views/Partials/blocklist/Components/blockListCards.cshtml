@@ -122,7 +122,7 @@
             @if (!string.IsNullOrEmpty(content.TitleSection))
             {
                 isFeature = true;
-                <section class="pt-5">
+                <section class="pageSection">
                     <div class="container">
                         <div class="row">
                             @foreach (var card in content.CardList)
@@ -130,7 +130,7 @@
                                 var listContent = (ContentModels.BlockCardProduct)card.Content;
                                 <div class="col-12 col-md-6">
                                     <div class="iconCardVert faqCard animateThis slideTop">
-                                        <img src="@listContent.Icon?.Url()" alt="@HtmlUtils.GetImageAlt(listContent.Icon)" />
+                                        <img src="@listContent.Icon?.Url()" alt="@HtmlUtils.GetImageAlt(listContent.Icon)" alt="">
                                         <div class="pe-lg-5">
                                             <h4>@listContent.Title</h4>
                                             <p>@listContent.Text</p>
@@ -141,6 +141,8 @@
                                     </div>
                                 </div>
                             }
+                           
+                           
                         </div>
                     </div>
                 </section>

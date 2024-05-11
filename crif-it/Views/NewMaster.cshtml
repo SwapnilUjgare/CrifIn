@@ -113,97 +113,13 @@
     <meta charset="utf-8">
     <title>@metaTitle</title>
     <meta name="description" content="@metaDescription">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="format-detection" content="telephone=no">
     <meta property="og:url" content="@HtmlUtils.FormatUrl(HttpContextAccessor?.HttpContext?.Request)" />
     <meta property="og:title" content="@ogTitle" />
     <meta property="og:description" content="@ogDescription" />
     <meta property="og:image" content="@ogImageUrl" />
 
-    @foreach (var cult in Model.Cultures)
-    {
-        CultureInfo tmpCi = new CultureInfo(cult.Key);
-        <link rel="alternate" hreflang="@tmpCi.TwoLetterISOLanguageName" href="@HtmlUtils.FormatUrl(Model.Url(cult.Key, mode: UrlMode.Absolute), true)" />
-    }
-    <link rel="alternate" hreflang="x-default" href="https://www.crif.com" />
-
-    <META NAME="ROBOTS" CONTENT="@robots">
-
-    @if (Umbraco.AssignedContentItem.GetTemplateAlias() == "Decade")
-    {
-        var decades = Umbraco.AssignedContentItem.SiblingsAndSelf();
-        var latest = decades?.OrderByDescending(decades => decades.Name).FirstOrDefault();
-
-        if (Umbraco.AssignedContentItem.Id == latest?.Id)
-        {
-            var history = Umbraco.AssignedContentItem.Parent?.Url();
-            <link rel="canonical" href="@history" />
-        }
-    }
-    else if (Umbraco.AssignedContentItem.GetTemplateAlias() == "CategoriaMercato")
-    {
-        var category = Umbraco.AssignedContentItem.Parent?.Url();
-        <link rel="canonical" href="@category" />
-    }
-    else if (Context.Request.QueryString.ToString().Contains("page"))
-    {
-        <link rel="canonical" href="@HtmlUtils.FormatUrl(Model.Url(mode: UrlMode.Absolute), true)@Context.Request.QueryString" />
-    }
-    else
-    {
-        <link rel="canonical" href="@HtmlUtils.FormatUrl(Model.Url(mode: UrlMode.Absolute), true)" />
-    }
-    @if (mercatiAssociati != "")
-    {
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            dataLayer.push({
-                'pageMarket': @Html.Raw("\'" + @mercatiAssociati + "\'"),
-            })
-        </script>
-    }
-
-    @if (crifConfiguration != null && crifConfiguration.EnableGtm)
-    {
-        <!-- Google Tag Manager -->
-        <script>
-            (function (w, d, s, l, i) {
-                w[l] = w[l] || []; w[l].push({
-                    'gtm.start':
-                        new Date().getTime(), event: 'gtm.js'
-                }); var f = d.getElementsByTagName(s)[0],
-                    j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-                        'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-            })(window, document, 'script', 'dataLayer', '@crifConfiguration.GtmCode');</script>
-        <!-- End Google Tag Manager -->
-    }
-
-    @if (crifConfiguration != null && crifConfiguration.EnableMatomo)
-    {
-        <!-- Matomo -->
-        <script>
-            var _paq = window._paq = window._paq || [];
-            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-            _paq.push(['trackPageView']);
-            _paq.push(['enableLinkTracking']);
-            (function () {
-                var u = "@crifConfiguration.MatomoUrl";
-                _paq.push(['setTrackerUrl', u + 'matomo.php']);
-                _paq.push(['setSiteId', '@crifConfiguration.MatomoKey']);
-                var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-                g.async = true; g.src = '//cdn.matomo.cloud/crif.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g, s);
-            })();
-        </script>
-        <!-- End Matomo Code -->
-    }
-
-    @if (crifConfiguration != null && crifConfiguration.EnableUsercentrics)
-    {
-        <script id="usercentrics-cmp"
-                src="https://app.usercentrics.eu/browser-ui/latest/loader.js"
-                data-settings-id="@crifConfiguration.UsercentricsKey" async>
-        </script>
-    }
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -213,13 +129,13 @@
 
     <!-- custom styles -->
     <link href="~/assets/css/styles.css?v=@cssVer" rel="stylesheet">
-    @if (isHome || isCreditScore)
-    {
-        <link href="~/assets/css/home.css?v=@cssVer" rel="stylesheet">
-    }
+    <link href="~/assets/css/home.css?v=@cssVer" rel="stylesheet">
     <link href="~/assets/css/responsive.css?v=@cssVer" rel="stylesheet" />
+
     <!-- swiper -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css" rel="stylesheet">
+    <!-- custom styles -->
+    
 </head>
 
 <body>
@@ -327,71 +243,115 @@
                                                 if (firstLevelPage.Children != null && firstLevelPage.Children.Any() && !hide1 && !hideChildren1)
                                                 {
                                                     var pageLink = firstLevelPage.TemplateId == null ? "#" : firstLevelPage.Url();
-                                                    <li class="hasDropdown">
-                                                        <a title="@firstLevelPage.Name" class="" href="@pageLink" role="button" data-link-type="menu" data-link="@firstLevelPage.Name" data-link-destination="@pageLink" data-link-section="@firstLevelPage.Name">
-                                                            @firstLevelPage.Name
-                                                        </a>
-                                                        <div class="dropDown cardDropdown">
-                                                            <div class="row mx-0">
-                                                                <div class="col-12 col-md-4 px-0 dropDownList">
-                                                                    <ul>
-                                                                        @foreach (IPublishedContent secondLevelPage in firstLevelPage.Children)
-                                                                        {
-                                                                            bool hide2 = (secondLevelPage.Value("hideInMenu") != null) ? (bool)secondLevelPage.Value("hideInMenu") : false;
-                                                                            bool hideChildren2 = (secondLevelPage.Value("hideChildrenInMenu") != null) ? (bool)secondLevelPage.Value("hideChildrenInMenu") : false;
-                                                                            bool addSpecialChild2 = (secondLevelPage.Value("addSpecialChildren") != null) ? (bool)secondLevelPage.Value("addSpecialChildren") : false;
-                                                                            var specialChild2 = (secondLevelPage.Value("specialChild") != null) ? secondLevelPage.Value("specialChild") : null;
-                                                                            var specialChildLabel2 = (secondLevelPage.Value("specialChildLabel") != null) ? secondLevelPage.Value("specialChildLabel") : "";
-                                                                            @if (secondLevelPage.Children != null && @secondLevelPage.Children.Any() && !hide2 && !hideChildren2)
-                                                                            {
-                                                                                <li><a title="@secondLevelPage.Name" class="nav-link" href="@secondLevelPage.Url()" data-link-type="menu" data-link="@secondLevelPage.Name" data-link-destination="@secondLevelPage.Url()" data-link-section="@firstLevelPage.Name - @secondLevelPage.Name">@secondLevelPage.Name</a></li>
+                                                    var featurecard = false;
+                                                    @if (menuSettings?.FeaturedCards != null)
+                                                    {
+                                                        foreach (BlockListItem item in menuSettings.FeaturedCards)
+                                                        {
+                                                            BlockFeaturedCard featuredCard = (BlockFeaturedCard)item.Content;
+                                                            if (featuredCard?.KindOfContent?.GetType() == firstLevelPage?.GetType() && featuredCard?.FeaturedCard != null)
+                                                            {
+                                                                featurecard = true;
 
-                                                                            }
-                                                                            else if (!hide2)
+                                                            }
+                                                        }
+                                                    }
+                                                    @if (featurecard)
+                                                    {
+                                                        <li class="hasDropdown hasCardDropdown">
+                                                            <a title="@firstLevelPage.Name" class="" href="@pageLink" role="button" data-link-type="menu" data-link="@firstLevelPage.Name" data-link-destination="@pageLink" data-link-section="@firstLevelPage.Name">
+                                                                @firstLevelPage.Name
+                                                            </a>
+                                                            <div class="dropDown cardDropdown">
+                                                                <div class="row mx-0">
+                                                                    <div class="col-12 col-md-4 px-0 dropDownList">
+                                                                        <ul>
+                                                                            @foreach (IPublishedContent secondLevelPage in firstLevelPage.Children)
                                                                             {
-                                                                                <li><a title="@secondLevelPage.Name" class="nav-link" href="@secondLevelPage.Url()" data-link-type="menu" data-link="@secondLevelPage.Name" data-link-destination="@secondLevelPage.Url()" data-link-section="@firstLevelPage.Name - @secondLevelPage.Name">@secondLevelPage.Name</a></li>
+                                                                                bool hide2 = (secondLevelPage.Value("hideInMenu") != null) ? (bool)secondLevelPage.Value("hideInMenu") : false;
+                                                                                bool hideChildren2 = (secondLevelPage.Value("hideChildrenInMenu") != null) ? (bool)secondLevelPage.Value("hideChildrenInMenu") : false;
+                                                                                bool addSpecialChild2 = (secondLevelPage.Value("addSpecialChildren") != null) ? (bool)secondLevelPage.Value("addSpecialChildren") : false;
+                                                                                var specialChild2 = (secondLevelPage.Value("specialChild") != null) ? secondLevelPage.Value("specialChild") : null;
+                                                                                var specialChildLabel2 = (secondLevelPage.Value("specialChildLabel") != null) ? secondLevelPage.Value("specialChildLabel") : "";
+                                                                                @if (secondLevelPage.Children != null && @secondLevelPage.Children.Any() && !hide2 && !hideChildren2)
+                                                                                {
+                                                                                    <li><a title="@secondLevelPage.Name" class="nav-link" href="@secondLevelPage.Url()" data-link-type="menu" data-link="@secondLevelPage.Name" data-link-destination="@secondLevelPage.Url()" data-link-section="@firstLevelPage.Name - @secondLevelPage.Name">@secondLevelPage.Name</a></li>
+
+                                                                                }
+                                                                                else if (!hide2)
+                                                                                {
+                                                                                    <li><a title="@secondLevelPage.Name" class="nav-link" href="@secondLevelPage.Url()" data-link-type="menu" data-link="@secondLevelPage.Name" data-link-destination="@secondLevelPage.Url()" data-link-section="@firstLevelPage.Name - @secondLevelPage.Name">@secondLevelPage.Name</a></li>
+                                                                                }
                                                                             }
-                                                                        }
-                                                                    </ul>
-                                                                </div>
-                                                                @if (menuSettings?.FeaturedCards != null)
-                                                                {
-                                                                    foreach (BlockListItem item in menuSettings.FeaturedCards)
+                                                                        </ul>
+                                                                    </div>
+                                                                    @if (menuSettings?.FeaturedCards != null)
                                                                     {
-                                                                        BlockFeaturedCard featuredCard = (BlockFeaturedCard)item.Content;
-                                                                        if (featuredCard?.KindOfContent?.GetType() == firstLevelPage?.GetType() && featuredCard?.FeaturedCard != null)
+                                                                        foreach (BlockListItem item in menuSettings.FeaturedCards)
                                                                         {
-                                                                            foreach (BlockListItem singleCard in featuredCard.FeaturedCard)
+                                                                            BlockFeaturedCard featuredCard = (BlockFeaturedCard)item.Content;
+                                                                            if (featuredCard?.KindOfContent?.GetType() == firstLevelPage?.GetType() && featuredCard?.FeaturedCard != null)
                                                                             {
-                                                                                BlockCardProduct card = (BlockCardProduct)singleCard.Content;
-                                                                                <div class="col-12 col-md-8 dropDownCard">
-                                                                                    <h5 class="featured-title">@Umbraco.GetDictionaryValue("menu_featured_card")</h5>
-                                                                                    <div class="iconCardImg boxShadow m-0 h-100">
-                                                                                        <div class="cardBody">
-                                                                                            <img src="@card?.Icon?.Url()" alt="@HtmlUtils.GetImageAlt(card?.Icon)" class="iconImg" />
-                                                                                            <h4 class="iconTitle colorBlue lineHeight2">@card?.Title</h4>
-                                                                                            <p class="iconInfo mb-4 mb-lg-5">@card?.Text</p>
-                                                                                            @if (card?.CallToAction != null)
-                                                                                            {
-                                                                                                <a title="@card?.CallToAction?.Name" href="@card?.CallToAction?.Url" class="arrowBtn" data-link-type="page" data-link="@card?.Title" data-link-destination="@card?.CallToAction?.Url" data-link-section="menu">@card?.CallToAction?.Name</a>
-                                                                                            }
-                                                                                        </div>
-                                                                                        <div class="imgWrapper">
-                                                                                            <img src="@card?.BackgroundImage?.Url()" alt="@HtmlUtils.GetImageAlt(card?.BackgroundImage)" />
+                                                                                foreach (BlockListItem singleCard in featuredCard.FeaturedCard)
+                                                                                {
+                                                                                    BlockCardProduct card = (BlockCardProduct)singleCard.Content;
+                                                                                    <div class="col-12 col-md-8 dropDownCard">
+                                                                                        <h5 class="featured-title">@Umbraco.GetDictionaryValue("menu_featured_card")</h5>
+                                                                                        <div class="iconCardImg boxShadow m-0 h-100">
+                                                                                            <div class="cardBody">
+                                                                                                <img src="@card?.Icon?.Url()" alt="@HtmlUtils.GetImageAlt(card?.Icon)" class="iconImg" />
+                                                                                                <h4 class="iconTitle colorBlue lineHeight2">@card?.Title</h4>
+                                                                                                <p class="iconInfo mb-4 mb-lg-5">@card?.Text</p>
+                                                                                                @if (card?.CallToAction != null)
+                                                                                                {
+                                                                                                    <a title="@card?.CallToAction?.Name" href="@card?.CallToAction?.Url" class="arrowBtn" data-link-type="page" data-link="@card?.Title" data-link-destination="@card?.CallToAction?.Url" data-link-section="menu">@card?.CallToAction?.Name</a>
+                                                                                                }
+                                                                                            </div>
+                                                                                            <div class="imgWrapper">
+                                                                                                <img src="@card?.BackgroundImage?.Url()" alt="@HtmlUtils.GetImageAlt(card?.BackgroundImage)" />
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                </div>
 
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
-                                                                }
 
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                    </li>
+                                                        </li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li class="hasDropdown">
+                                                            <a title="@firstLevelPage.Name" class="" href="@pageLink" role="button" data-link-type="menu" data-link="@firstLevelPage.Name" data-link-destination="@pageLink" data-link-section="@firstLevelPage.Name">
+                                                                @firstLevelPage.Name
+                                                            </a>
+                                                            <div class="dropDown">
+                                                                <ul class="">
+                                                                    @foreach (IPublishedContent secondLevelPage in firstLevelPage.Children)
+                                                                    {
+                                                                        bool hide2 = (secondLevelPage.Value("hideInMenu") != null) ? (bool)secondLevelPage.Value("hideInMenu") : false;
+                                                                        bool hideChildren2 = (secondLevelPage.Value("hideChildrenInMenu") != null) ? (bool)secondLevelPage.Value("hideChildrenInMenu") : false;
+                                                                        bool addSpecialChild2 = (secondLevelPage.Value("addSpecialChildren") != null) ? (bool)secondLevelPage.Value("addSpecialChildren") : false;
+                                                                        var specialChild2 = (secondLevelPage.Value("specialChild") != null) ? secondLevelPage.Value("specialChild") : null;
+                                                                        var specialChildLabel2 = (secondLevelPage.Value("specialChildLabel") != null) ? secondLevelPage.Value("specialChildLabel") : "";
+                                                                        @if (secondLevelPage.Children != null && @secondLevelPage.Children.Any() && !hide2 && !hideChildren2)
+                                                                        {
+                                                                            <li><a title="@secondLevelPage.Name" class="nav-link" href="@secondLevelPage.Url()" data-link-type="menu" data-link="@secondLevelPage.Name" data-link-destination="@secondLevelPage.Url()" data-link-section="@firstLevelPage.Name - @secondLevelPage.Name">@secondLevelPage.Name</a></li>
 
+                                                                        }
+                                                                        else if (!hide2)
+                                                                        {
+                                                                            <li><a title="@secondLevelPage.Name" class="nav-link" href="@secondLevelPage.Url()" data-link-type="menu" data-link="@secondLevelPage.Name" data-link-destination="@secondLevelPage.Url()" data-link-section="@firstLevelPage.Name - @secondLevelPage.Name">@secondLevelPage.Name</a></li>
+                                                                        }
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        </li>
+                                                    }
                                                 }
                                                 else if (!hide1)
                                                 {
@@ -492,7 +452,7 @@
                 <div class="row flex-row-reverse align-items-center py-3">
                     <div class="col-12 col-lg-4">
                         <div class="d-md-flex justify-content-center d-lg-block text-center text-md-start text-lg-center px-lg-5 mb-5 mb-lg-0">
-                            <img src="images/icons/icon-envelope.svg" alt="" class="" />
+                            <img src="~/assets/images/icons/icon-envelope.svg" alt="" class="envelopeIcon" />
                             <div class="ms-4 ms-lg-0">
                                 <h4 class="my-4 mt-md-0 mt-lg-3 colorWhite footerTitle">How may we assist you?</h4>
                                 @if (firstLevelPages != null)
@@ -548,8 +508,11 @@
                                         <ul>
                                             @foreach (var a in menuSettings.MoreInformation)
                                             {
+                                                @if(a.ExternalLink != null)
+                                                {
                                                 <li><a href="@a.ExternalLink.Url">@a.ExternalLink.Name</a></li>
-                                            }
+                                                }
+                                                }
                                         </ul>
                                     </div>
                                 </div>

@@ -8,8 +8,70 @@
 }
 @if (settings != null && settings.NewTemplate)
 {
-    <section class="lightGreyBg2 pageSection" id="@settings.AnchorID">
-        <div class="container">
+    <section class="pageSection" id="@settings.AnchorID">
+        <div class="px-4 ps-lg-5 pe-md-0 ms-md-5">
+            @if (!content.TitoloIstruzioni.IsNullOrWhiteSpace())
+            {
+                <h2 class="title text-center px-5">@content.TitoloIstruzioni</h2>
+            }
+            <div class="vertSliderWrp mt-5 ps-lg-5 px-2 px-md-0">
+                <ul class="tabs vert-pagination"></ul>
+                <div class="tab_container">
+                    <div class="vert-swipper">
+                        <div class="swiper-wrapper">
+                            <!-- Slides -->
+                            @if (content.Istruzioni != null && content.Istruzioni.Any())
+                            {
+                                @foreach (var item in content.Istruzioni)
+                                {
+                                    ContentModels.BlockLittleParagraph itemContent = (ContentModels.BlockLittleParagraph)item.Content;
+                                    @if (i == 1)
+                                    {
+                                        <div class="swiper-slide">
+                                            @if (!itemContent.Titoletto.IsNullOrWhiteSpace())
+                                            {
+
+                                                <h3 class="d_active tab_drawer_heading" rel="@i">@itemContent.Titoletto</h3>
+                                            }
+                                            
+                                            <div id="@i" class="tab_content">
+                                                <div class="iconCard blueCard boxShadow mt-lg-5 mt-xl-0">
+                                                    @if (itemContent.Testo != null)
+                                                    {
+                                                        @Html.Raw(itemContent.Testo)
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="swiper-slide">
+                                            @if (!itemContent.Titoletto.IsNullOrWhiteSpace())
+                                            {
+
+                                                <h3 class="tab_drawer_heading" rel="@i">@itemContent.Titoletto</h3>
+                                            }
+
+                                            <div id="@i" class="tab_content">
+                                                <div class="iconCard blueCard boxShadow mt-lg-5 mt-xl-0">
+                                                    @if (itemContent.Testo != null)
+                                                    {
+                                                        @Html.Raw(itemContent.Testo)
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* <div class="container">
             @if (!content.TitoloIstruzioni.IsNullOrWhiteSpace())
             {
                 <h2 class="title text-center">@content.TitoloIstruzioni</h2>
@@ -87,7 +149,7 @@
             </div>
 
 
-        </div>
+        </div> *@
     </section>
 }
 else
