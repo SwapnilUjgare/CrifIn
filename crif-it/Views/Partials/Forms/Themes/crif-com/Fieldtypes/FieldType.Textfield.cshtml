@@ -9,7 +9,7 @@
     var validate = (Model.Mandatory || Model.Validate) ? "true" : "false";
 }
 <input type="@fieldType" name="@Model.Name" id="@Model.Id" data-umb="@Model.Id"
-       class="text @Html.GetFormFieldClass(Model.FieldTypeName) form-control"
+       class="text @Html.GetFormFieldClass(Model.FieldTypeName) formField"
        value="@Model.ValueAsHtmlString" maxlength="@maxLength" placeholder="@placeholder" autocomplete="@autocomplete"
        data-val="@validate" 
        @if(Model.Mandatory){<text>"data-val-required="@Model.RequiredErrorMessage"</text>}

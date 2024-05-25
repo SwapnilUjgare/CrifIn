@@ -78,5 +78,12 @@ namespace Crif.It.Models
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "10.6.1+82eae48")]
 		[ImplementPropertyType("isFullwidth")]
 		public virtual bool IsFullwidth => this.Value<bool>(_publishedValueFallback, "isFullwidth");
+
+		///<summary>
+		/// New Template
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "10.6.1+82eae48")]
+		[ImplementPropertyType("newTemplate")]
+		public virtual bool NewTemplate => this.Value<bool>(_publishedValueFallback, "newTemplate");
 	}
 }

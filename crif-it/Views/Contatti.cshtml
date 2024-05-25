@@ -3,7 +3,7 @@
 @using Crif.It.Utils;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Contatti>
 @{
-    Layout = "Master.cshtml";
+    Layout = "NewMaster.cshtml";
     var contatto = Model.Children()?.Where(x => x.ContentType.Alias == "contatto");
 }
 <main>

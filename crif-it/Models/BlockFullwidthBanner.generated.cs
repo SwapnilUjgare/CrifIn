@@ -58,6 +58,13 @@ namespace Crif.It.Models
 		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops Image => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "image");
 
 		///<summary>
+		/// Hide BreadCrum
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "10.6.1+82eae48")]
+		[ImplementPropertyType("showBreadCrum")]
+		public virtual bool ShowBreadCrum => this.Value<bool>(_publishedValueFallback, "showBreadCrum");
+
+		///<summary>
 		/// Call To Action
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "10.6.1+82eae48")]

@@ -57,6 +57,29 @@ namespace Crif.It.Models
 		public virtual global::System.Nullable<global::System.Guid> Form => this.Value<global::System.Nullable<global::System.Guid>>(_publishedValueFallback, "form");
 
 		///<summary>
+		/// Form Display
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "10.6.1+82eae48")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("formDisplay")]
+		public virtual string FormDisplay => this.Value<string>(_publishedValueFallback, "formDisplay");
+
+		///<summary>
+		/// Form Subtitle
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "10.6.1+82eae48")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("formSubtitle")]
+		public virtual string FormSubtitle => this.Value<string>(_publishedValueFallback, "formSubtitle");
+
+		///<summary>
+		/// IsGrayBackGround
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "10.6.1+82eae48")]
+		[ImplementPropertyType("isGrayBackGround")]
+		public virtual bool IsGrayBackGround => this.Value<bool>(_publishedValueFallback, "isGrayBackGround");
+
+		///<summary>
 		/// Theme
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "10.6.1+82eae48")]

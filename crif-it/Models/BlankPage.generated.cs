@@ -18,7 +18,7 @@ using Umbraco.Extensions;
 
 namespace Crif.It.Models
 {
-	/// <summary>Blank Page</summary>
+	/// <summary>FAQ</summary>
 	[PublishedModel("blankPage")]
 	public partial class BlankPage : PublishedContentModel, ISEO
 	{
