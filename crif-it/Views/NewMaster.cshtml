@@ -169,10 +169,10 @@
                                     <li class="hasDropdown">
                                         <a href="#" class="country-toggle">@Umbraco.GetDictionaryValue("country_label") <img src="~/assets/images/icons/globe-icon.svg" alt="" class="globe" /></a>
                                         <div class="container WorldWideDropdown dropDown">
-                                            <div class="row justify-content-between">
+                                            <div class="row justify-content-between w-100 mx-0">
                                                 <div class="col-lg-3">
                                                     <h4>@menuSettings?.GlobalLabel</h4>
-                                                    <a title="@menuSettings?.GlobalLink?.Name" href="@menuSettings?.GlobalLink?.Url" target="@menuSettings?.GlobalLink?.Target" class="orangeBtn">@menuSettings?.GlobalLink?.Name</a>
+                                                    <a title="@menuSettings?.GlobalLink?.Name" href="@menuSettings?.GlobalLink?.Url" target="@menuSettings?.GlobalLink?.Target" class="orangeBtn  lineBtn w-fit">@menuSettings?.GlobalLink?.Name</a>
 
                                                 </div>
                                                 @if (menuSettings != null && menuSettings.ContinentAndCountries != null)
@@ -181,9 +181,9 @@
                                                     {
                                                         BlockMenuCountries continent = (BlockMenuCountries)item.Content;
                                                         var colLayout = continent?.CountriesSettings?.Count > 11 ? "double-column" : "";
-                                                        <div class="col-lg-3">
+                                                        <div class="col-6 col-md-2 col-xl-3">
                                                             <h4>@continent?.CountriesContinent</h4>
-                                                            <ul class="">
+                                                            <ul class="@colLayout">
                                                                 @if (continent != null && continent.CountriesSettings != null)
                                                                 {
                                                                     foreach (BlockListItem elm in continent.CountriesSettings)
