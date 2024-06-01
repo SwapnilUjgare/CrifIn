@@ -306,36 +306,37 @@ $('.readMoreBtn').click(function () {
 // swiper with vertical textual pagination
 var init = false;
 var vertSlider;
-var menu = ['Customer Acquisition', 'Customer Management', 'Collections', 'Business Planning', 'Process Automation', 'Due Diligence', 'Digital Transformation']
+var menu = [];
+$(".vert-swipper .tab_drawer_heading").each(function () { menu.push($(this).text()) });
 function vertSwiperCard() {
-   if (window.innerWidth >= 768) {
-      if (!init) {
-         init = true;
-         vertSlider = new Swiper('.vert-swipper', {
-            lazy: true,
-            loop: true,
-            speed: 1000,
-            slidesPerView: 1.5,
-            spaceBetween: 40,
-            // autoplay: {
-            //    delay: 1000,
-            //    disableOnInteraction: false,
-            // },
-            // If we need pagination
-            pagination: {
-               el: '.vert-pagination',
-               clickable: true,
-               renderBullet: function (index, className) {
-                  return '<li class="' + className + '">' + (menu[index]) + '</li>';
-               },
-            }
-         })
-      }
-   }
-   else if (init) {
-      vertSlider.destroy();
-      init = false;
-   }
+    if (window.innerWidth >= 768) {
+        if (!init) {
+            init = true;
+            vertSlider = new Swiper('.vert-swipper', {
+                lazy: true,
+                loop: true,
+                speed: 1000,
+                slidesPerView: 1.5,
+                spaceBetween: 40,
+                // autoplay: {
+                //    delay: 1000,
+                //    disableOnInteraction: false,
+                // },
+                // If we need pagination
+                pagination: {
+                    el: '.vert-pagination',
+                    clickable: true,
+                    renderBullet: function (index, className) {
+                        return '<li class="' + className + '">' + (menu[index]) + '</li>';
+                    },
+                }
+            })
+        }
+    }
+    else if (init) {
+        vertSlider.destroy();
+        init = false;
+    }
 }
 vertSwiperCard()
 window.addEventListener("resize", vertSwiperCard);
