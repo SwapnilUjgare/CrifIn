@@ -196,7 +196,7 @@ li.hasDropdown:hover>a{color: var(--orange);}
 .iconCardImg .iconImg{height: 55px; margin-bottom: 20px}
 .iconCardImg .cardBody{max-width: 65%;}
 .iconCardImg .imgWrapper{aspect-ratio: 2/3; position: absolute;top: 0;bottom: 0;right: 0;overflow: hidden;z-index: -1;max-width: 40%;}
-.iconCardImg .imgWrapper::after {content: "";position: absolute;bottom: 0;right: 100%;display: block;width: 11rem;height: 22rem;background-color: #fff;z-index: 1; transform: var(--rotate);transform-origin: bottom right;}
+.iconCardImg .imgWrapper::after {content: "";position: absolute;bottom: 0;right: 100%;display: block;width: 12rem;height: 25rem;background-color: #fff;z-index: 1; transform: var(--rotate);transform-origin: bottom right;}
 .iconCardImg .imgWrapper img{object-fit: cover;object-position: top right;width: 100%;height: 100%;transition: all 0.7s ease-out;}
 .iconCardImg:hover .imgWrapper img{transform: scale(1.1);}
 .iconCardImg a::before{position: absolute;top: 0;right: 0;bottom: 0;left: 0;z-index: 1;content: "";}
